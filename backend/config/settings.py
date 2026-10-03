@@ -16,6 +16,7 @@ def _split_env_list(name, default):
 
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-only-change-me")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() == "true"
+APPEND_SLASH = True
 ALLOWED_HOSTS = _split_env_list(
     "DJANGO_ALLOWED_HOSTS",
     "localhost,127.0.0.1,collage-eep.onrender.com,.onrender.com",

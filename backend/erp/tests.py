@@ -10,6 +10,11 @@ class ProductionHostConfigTests(TestCase):
         self.assertIn("collage-eep.onrender.com", settings.ALLOWED_HOSTS)
         self.assertIn("https://collage-eep.onrender.com", getattr(settings, "CSRF_TRUSTED_ORIGINS", []))
 
+    def test_api_root_urls_are_available(self):
+        self.assertEqual(self.client.get("/").status_code, 302)
+        self.assertEqual(self.client.get("/api").status_code, 401)
+        self.assertEqual(self.client.get("/api/").status_code, 401)
+
 
 class RoleAccessTests(TestCase):
     def setUp(self):
