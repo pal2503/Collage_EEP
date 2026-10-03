@@ -9,9 +9,21 @@ try:
 except ImportError:
     pass
 
+
+def _split_env_list(name, default):
+    return [value.strip() for value in os.getenv(name, default).split(",") if value.strip()]
+
+
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-only-change-me")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() == "true"
-ALLOWED_HOSTS = [host.strip() for host in os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",") if host.strip()]
+ALLOWED_HOSTS = _split_env_list(
+    "DJANGO_ALLOWED_HOSTS",
+    "localhost,127.0.0.1,collage-eep.onrender.com,.onrender.com",
+)
+CSRF_TRUSTED_ORIGINS = _split_env_list(
+    "CSRF_TRUSTED_ORIGINS",
+    "https://collage-eep.onrender.com,https://*.onrender.com,http://localhost:8000,http://127.0.0.1:8000",
+)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -73,7 +85,10 @@ USE_TZ = True
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOWED_ORIGINS = [origin.strip() for origin in os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173,https://next-zen-zeta.vercel.app").split(",") if origin.strip()]
+CORS_ALLOWED_ORIGINS = _split_env_list(
+    "CORS_ALLOWED_ORIGINS",
+    "http://localhost:5173,http://127.0.0.1:5173,https://next-zen-zeta.vercel.app,https://collage-eep.onrender.com",
+)
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": ["rest_framework_simplejwt.authentication.JWTAuthentication"],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],

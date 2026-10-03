@@ -1,7 +1,14 @@
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 from .models import Course, Department, User
+
+
+class ProductionHostConfigTests(TestCase):
+    def test_render_host_is_allowed_and_trusted(self):
+        self.assertIn("collage-eep.onrender.com", settings.ALLOWED_HOSTS)
+        self.assertIn("https://collage-eep.onrender.com", getattr(settings, "CSRF_TRUSTED_ORIGINS", []))
 
 
 class RoleAccessTests(TestCase):
